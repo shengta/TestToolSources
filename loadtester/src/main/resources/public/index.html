@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+	function form_to_json(selector) {
+		var ary = $(selector).serializeArray();
+		var obj = {};
+		for (var a = 0; a < ary.length; a++)
+			obj[ary[a].name] = ary[a].value;
+		
+		return JSON.stringify(obj);
+	}
+	function populate(frm, data) {
+		$.each(data, function(key, value) {
+			$('[name=' + key + ']', frm).val(value);
+		});
+	}
+
+	$(document).ready(function() {
+		$.get("/config", function(data, status) {
+			populate('#config', $.parseJSON(data));
+		});
+		
+		$.get("/results", function(data2, status) {
+			$('#results').html(data2);
+		});
+	});
+
+	function save() {
+		$.ajax({
+			cache : false,
+			type : "POST",
+			url : '/config',
+			data : form_to_json($('#config')),
+			datatype : 'json',
+			contentType: 'application/json',
+			success : function(data) {
+				alert("Saved" + data);
+			}
+		});
+	}
+
+	function runTest(type) {
+		var url = "/test?type=" + type;
+		$.get(url, function(data, status) {
+			$('#status').html("Test in progress...");
+			
+			$.get("/isTestFinished", function(data1, status) {
+				$('#status').html("Test is just finished.");
+				
+				$.get("/results", function(data2, status) {
+					$('#results').html(data2);
+				});
+			});
+		});
+	}
+</script>
+</head>
+<body>
+	<div class="main-content">
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-sm-4">
+					<div class="card">
+						<h2 class="card-header">Config</h2>
+						<div class="card-body">
+							<form id="config">
+								<div class="row">ORIGIN_SERVER</div>
+								<div class="row">
+									<input type="text" name="ORIGIN_SERVER">
+								</div>
+								<div class="row">EDGE_ACCESS_POINT</div>
+								<div class="row">
+									<input type="text" name="EDGE_ACCESS_POINT">
+								</div>
+								<div class="row">TEST_FILE</div>
+								<div class="row">
+									<input type="text" name="TEST_FILE">
+								</div>
+								<div class="row">DURATION</div>
+								<div class="row">
+									<input type="text" name="DURATION">
+								</div>
+								<div class="row">LOAD_SIZE</div>
+								<div class="row">
+									<input type="text" name="LOAD_SIZE">
+								</div>
+								<div class="row">STREAM_NAME</div>
+								<div class="row">
+									<input type="text" name="STREAM_NAME">
+								</div>
+							</form>
+							<div class="row">
+								<button class="btn btn-success" onclick="save()">
+									<i class="fa fa-floppy-o"></i> Save
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="card">
+						<h2 class="card-header">Ant Media Server Load Test</h2>
+						<div class="card-body">
+							<ul>
+								<li><h2>
+										HLS Play
+										<button type="button" onclick="runTest('hls_play')"
+											class="btn btn-default">
+											<i class="fa fa-play"></i>
+										</button>
+									</h2></li>
+								<li><h2>
+										RTMP Play
+										<button type="button" onclick="runTest('rtmp_play')"
+											class="btn btn-default">
+											<i class="fa fa-play"></i>
+										</button>
+									</h2></li>
+								<li><h2>
+										WebRTC Play
+										<button type="button" onclick="runTest('webrtc_play')"
+											class="btn btn-default">
+											<i class="fa fa-play"></i>
+										</button>
+									</h2></li>
+								<li><h2>
+										RTMP Publish
+										<button type="button" onclick="runTest('rtmp_publish')"
+											class="btn btn-default">
+											<i class="fa fa-play"></i>
+										</button>
+									</h2></li>
+								<li><h2>
+										WebRTC Publish
+										<button type="button" onclick="runTest('webrtc_publish')"
+											class="btn btn-default">
+											<i class="fa fa-play"></i>
+										</button>
+									</h2></li>
+
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="card">
+						<h2 class="card-header">Results</h2>
+						<div class="card-body" id="status"></div>
+						<div class="card-body" id="results"></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>
