@@ -1,0 +1,62 @@
+
+
+
+
+
+<!doctype html>
+<html>
+<head>
+    
+    <title>Combining Streams : Flowplayer</title>
+
+    <script src="http://releases.flowplayer.org/js/flowplayer-3.2.13.min.js"></script>
+
+    </head>
+
+<body>
+    <!-- our player container named "streams" -->
+<a 
+    style="display:block;width:500px;height:400px"
+    id="player">
+    </a>
+
+<script>
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+};
+
+var server = getUrlParameter('server');
+var streamName = getUrlParameter('name');
+
+$f("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf", {
+    clip: {
+
+        provider: 'rtmp',
+        url: ''+streamName,
+        live: true,
+    },
+
+    // our rtmp plugin is configured identically as in the first example
+    plugins: {
+        rtmp: {
+            url: "flowplayer.rtmp-3.2.13.swf",
+            netConnectionUrl: 'rtmp://'+server+'/WebRTCAppEE'
+        }
+    }
+});
+</script>
+</body>
+
+</html>

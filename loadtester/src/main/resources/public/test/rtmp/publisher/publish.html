@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script type="text/javascript" src="nePublisher.min.js"></script>
+<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="buttons.css">
+<style type="text/css">
+.m-input {
+	margin-bottom: 10px;
+}
+
+.u-input-name {
+	display: inline-block;
+	width: 85px;
+}
+
+.u-input {
+	width: 500px;
+	height: 25px;
+	border: none;
+	border-bottom: 1px solid #000;
+	outline: none;
+	color: #000;
+}
+
+.testBtn {
+	width: 150px;
+}
+
+.u-status {
+	margin-left: 10px;
+	display: inline-block;
+}
+</style>
+</head>
+<body>
+	<div class="m-input">
+		<button class="button button-primary button-rounded testBtn"
+			id="previewBtn" onclick="startPreview()">Preview</button>
+		<button class="button button-primary button-rounded testBtn"
+			id="publishBtn" onclick="startPublish()">Publish</button>
+		<span class="u-status"></span>
+	</div>
+	<div id="flashStatus"></div>
+	<object width="640" height="360" id="my-publisher"
+		type="application/x-shockwave-flash" data="publisher-ebd4e1deba.swf"
+		style="visibility: visible;">
+		<param name="wmode" value="transparent">
+		<param name="allowFullScreen" value="true">
+		<param name="allowScriptAccess" value="always">
+		<param name="quality" value="high">
+		<param name="align" value="middle">
+		<param name="flashvars"
+			value="id=100&width=862&height=486&js_bridge_method=nePublisher.js_bridge_message">
+	</object>
+	<script type="text/javascript">
+		var cameraList,
+			microPhoneList,
+			cameraOptions = '',
+			microPhoneOptions = '';
+		var selectedCamera;
+		
+		var publishBtn = document.getElementById('publishBtn');
+		var previewBtn = document.getElementById('previewBtn')
+		var testInput = document.getElementsByClassName('u-input');
+		
+
+		function isFlashEnabled() 
+		{
+		    var flash = navigator.plugins.namedItem('Shockwave Flash');
+		    return flash != null;
+		}
+		
+		if(isFlashEnabled()) 
+		{ 
+			//$("#flashStatus").html('Flash is installed (but may need to be enabled)'); 
+		} 
+		else { 
+			$("#flashStatus").html('Flash is either not installed or disabled'); 
+		}
+		
+		
+		var getUrlParameter = function getUrlParameter(sParam) {
+		    var sPageURL = window.location.search.substring(1),
+		        sURLVariables = sPageURL.split('&'),
+		        sParameterName,
+		        i;
+
+		    for (i = 0; i < sURLVariables.length; i++) {
+		        sParameterName = sURLVariables[i].split('=');
+
+		        if (sParameterName[0] === sParam) {
+		            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+		        }
+		    }
+		};
+		
+		var myPublisher = new nePublisher('my-publisher', {
+				//viewOptions
+				videoWidth: 640,
+				videoHeight: 360,
+				fps: 20,
+				bitrate: 600
+			}, {
+				//flashOptions
+				previewWindowWidth: 640,
+				previewWindowHeight: 360,
+				wmode: 'transparent',
+				quality: 'high',
+				allowScriptAccess: 'always'
+			}, function() {
+				
+				cameraList = this.getCameraList();
+				selectedCamera = cameraList[0];
+				microPhoneList = this.getMicroPhoneList();
+				for (var i = cameraList.length - 1; i >= 0; i--) {
+					cameraOptions = '<option value="' + i + '">' + cameraList[i] + '</option>' + cameraOptions;
+				}
+				for (var i = microPhoneList.length - 1; i >= 0; i--) {
+					microPhoneOptions = '<option value="' + i + '">' + microPhoneList[i] + '</option>' + microPhoneOptions;
+				}
+				document.getElementById("cameraSelect").innerHTML = cameraOptions;
+				document.getElementById("microPhoneSelect").innerHTML = microPhoneOptions;
+			}, function(code, desc) {
+				console.log(code, desc);
+			});
+		var qualityList = [
+			{
+				fps: 20,
+				bitrate: 600,
+				videoWidth:480,
+				videoHeight:360
+			},
+			{
+				fps: 20,
+				bitrate: 800,
+				videoWidth:640,
+				videoHeight:480
+			},
+			{
+				fps: 20,
+				bitrate: 1500,
+				videoWidth:960,
+				videoHeight:540
+			}
+		];
+		var getCameraIndex = function() {
+			var cameraSelect = document.getElementById("cameraSelect");
+			var cameraIndex = cameraSelect.selectedIndex;
+			return cameraSelect.options[cameraIndex].value;
+		};
+		var getMicroPhoneIndex = function() {
+			var microPhoneSelect = document.getElementById("microPhoneSelect");
+			var microPhoneIndex = microPhoneSelect.selectedIndex;
+			return microPhoneSelect.options[microPhoneIndex].value;
+		};
+		var getQualityOption = function() {
+			var qualitySelect = document.getElementById("qualitySelect");
+			var qualityIndex = qualitySelect.selectedIndex;
+			return qualityList[qualityIndex];
+		};
+		var startPreview = function() {
+			myPublisher.startPreview(0);
+			document.getElementsByClassName('u-status')[0].innerHTML = 'Preview';
+		};
+		var startPublish = function() {
+			var server = getUrlParameter("server");
+			var name = getUrlParameter("name");
+			var publishUrl = "rtmp://"+server+"/WebRTCAppEE/"+name;
+			startPublishCall();
+			myPublisher.setCamera(0);
+			myPublisher.setMicroPhone(0);
+			myPublisher.startPublish(publishUrl, qualityList[0],function(code, desc) {
+				console.log(code, desc);
+				alert(code + '：' + desc);
+				stopPublishCall();
+			});
+		};
+		var stopPublish = function() {
+			myPublisher.stopPublish();
+			stopPublishCall();
+		};
+		var startPublishCall = function() {
+			console.log('start');
+			document.getElementsByClassName('u-status')[0].innerHTML = 'Live';
+			publishBtn.innerHTML = 'Stop';
+			publishBtn.onclick = stopPublish;
+			for (var i = testInput.length - 1; i >= 0; i--) {
+				testInput[i].disabled = true;
+			}
+			previewBtn.disabled = true;
+
+		};
+		var stopPublishCall = function() {
+			console.log('stop');
+			document.getElementsByClassName('u-status')[0].innerHTML = 'Prev';
+			publishBtn.innerHTML = 'Live';
+			publishBtn.onclick = startPublish;
+			for (var i = testInput.length - 1; i >= 0; i--) {
+				testInput[i].disabled = false;
+			}
+			previewBtn.disabled = false;
+		};
+    </script>
+</body>
+</html>

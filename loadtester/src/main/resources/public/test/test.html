@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+	var streamId="stream1";
+
+	function loadPublisher(protocol) {
+		var server = $("#serverAddress").val();
+
+		if (protocol == "webrtc") {
+			$("#publisherFrame").attr("src", "http://"+server+":5080/WebRTCAppEE/index.html?name="+streamId);
+		} else if (protocol == "rtmp") {
+			$("#publisherFrame").attr("src", "/test/rtmp/publisher/publish.html?server=" + server+"&name="+streamId);
+		}
+	}
+
+	function loadPlayer(protocol) {
+		var server = $("#serverAddress").val();
+
+		if (protocol == "webrtc") {
+			$("#playerFrame").attr("src", "http://"+server+":5080/WebRTCAppEE/player.html?name="+streamId);
+		} else if (protocol == "rtmp") {
+			$("#playerFrame").attr("src", "/test/rtmp/player/play.html?server=" + server+"&name="+streamId);
+		} else if (protocol == "hls") {
+			$("#playerFrame").attr("src", "http://"+server+":5080/WebRTCAppEE/play.html?name="+streamId);
+		}
+
+	}
+</script>
+</head>
+<body>
+	<div>
+		<div class="container-fluid">
+			<br />
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="card">
+						<h2 class="card-header">Ant Media Server Settings</h2>
+						<div class="card-body">
+							Address: <input type="text" id="serverAddress" value="localhost">
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="card">
+						<h2 class="card-header">Publisher</h2>
+						<div class="card-body">
+							<div class="row">
+								<button type="button" onclick="loadPublisher('webrtc')"
+									class="btn btn-default">WebRTC</button>
+								&nbsp;
+								<button type="button" onclick="loadPublisher('rtmp')"
+									class="btn btn-default">RTMP</button>
+							</div>
+							<br />
+							<div class="row">
+								<iframe id="publisherFrame" class="w-100"  style="height:60vh;"> </iframe>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="card">
+						<h2 class="card-header">Player</h2>
+						<div class="card-body">
+							<div class="row">
+								<button type="button" onclick="loadPlayer('webrtc')"
+									class="btn btn-default">WebRTC</button>
+								&nbsp;
+								<button type="button" onclick="loadPlayer('rtmp')"
+									class="btn btn-default">RTMP</button>
+								&nbsp;
+								<button type="button" onclick="loadPlayer('hls')"
+									class="btn btn-default">HLS</button>
+							</div>
+							<br />
+							<div class="row">
+								<iframe id="playerFrame" class="w-100" style="height:60vh;"> </iframe>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
