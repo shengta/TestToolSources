@@ -1,55 +1,76 @@
 package antmedia.loadtester;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.ProcessBuilder.Redirect;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
+import antmedia.loadtester.scenarios.AbstractScenario;
+import antmedia.loadtester.scenarios.HLSPlayScenario;
+import antmedia.loadtester.scenarios.RTMPPlayScenario;
+import antmedia.loadtester.scenarios.RTMPPublishScenario;
+import antmedia.loadtester.scenarios.WebRTCPlayScenario;
+import antmedia.loadtester.scenarios.WebRTCPublisherScenario;
 
 public class TestRunner {
-	
-	static Process process;
+
+	static AbstractScenario scenario;
+	static boolean logedIn = false;
 
 	public static void runTest(String type) {
-		ProcessBuilder pb = new ProcessBuilder("/home/antmedia/test/TestScriptAndTools-master/Common/runtest.sh", type);
-		pb.redirectOutput(Redirect.INHERIT);
-		pb.redirectError(Redirect.INHERIT);
-		try {
-			process = pb.start();
-		} catch (IOException e) {
-			e.printStackTrace();
+
+		if(!logedIn) {
+			RestManager.signUp(ConfigManager.conf.ORIGIN_SERVER);
+			RestManager.login(ConfigManager.conf.ORIGIN_SERVER);
+			logedIn = true;
 		}
+
+		if(type.contentEquals(RTMPPublishScenario.name)) {
+			scenario = new RTMPPublishScenario();
+		}
+		else if(type.contentEquals(RTMPPlayScenario.name)) {
+			scenario = new RTMPPlayScenario();
+		}
+		else if(type.contentEquals(HLSPlayScenario.name)) {
+			scenario = new HLSPlayScenario();
+		}
+		else if(type.contentEquals(WebRTCPublisherScenario.name)) {
+			scenario = new WebRTCPublisherScenario();
+		}
+		else if(type.contentEquals(WebRTCPlayScenario.name)) {
+			scenario = new WebRTCPlayScenario();
+		}
+
+		scenario.start();
 	}
 
 	public static String getHistory() {
 		String history = "";
-		try {
-			FileInputStream fstream = new FileInputStream("/home/antmedia/test/results/history");
-			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-			String strLine;
-
+		File file = new File("/home/antmedia/test/results");
+		if(file.exists()) {
+			String[] dirs = file.list();
+			Arrays.sort(dirs);
 			history = "<ul>";
-			while ((strLine = br.readLine()) != null)   {
-				strLine = strLine.replace("/home/antmedia/test/results", "");
-				history += "<li><a href='/testresults"+strLine+"/measures.png"+"' target='_blank'>"+strLine+"</a></li>";
+			for (String dir : dirs) {
+				history += "<li><a href='/testresults/"+dir+"/report.html"+"' target='_blank'>"+dir+"</a></li>";
 			}
 			history += "</ul>";
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+
 		return history;
 	}
 
 	public static boolean getIsTestFinished() {
-		while (process.isAlive()) {
+		while (scenario.isRunning()) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}			
 		}
-		
+
 		return true;
 	}
 

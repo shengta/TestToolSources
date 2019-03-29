@@ -1,12 +1,14 @@
 package antmedia.loadtester;
 
 public class Config {
-	public String ORIGIN_SERVER;
-	private String EDGE_ACCESS_POINT;
-	public String TEST_FILE;
-	public String DURATION;
-	public String LOAD_SIZE;
-	public String STREAM_NAME;
+	public String ORIGIN_SERVER = "localhost";
+	private String EDGE_ACCESS_POINT = "localhost";
+	public String TEST_FILE = "/home/antmedia/test/Test.mp4";
+	public String DURATION = "60";
+	public String LOAD_SIZE = "5";
+	public String STREAM_NAME = "deneme";
+	public String USER = "antmedia";
+	public String PASS = "antmedia";
 	
 	public String getORIGIN_SERVER() {
 		return ORIGIN_SERVER;
@@ -43,5 +45,17 @@ public class Config {
 	}
 	public void setEDGE_ACCESS_POINT(String eDGE_ACCESS_POINT) {
 		EDGE_ACCESS_POINT = eDGE_ACCESS_POINT;
+	}
+	public String getUSER() {
+		return USER;
+	}
+	public void setUSER(String uSER) {
+		USER = uSER;
+	}
+	public String getPASS() {
+		return PASS;
+	}
+	public void setPASS(String pASS) {
+		PASS = pASS;
 	}
 }

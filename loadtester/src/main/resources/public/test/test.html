@@ -9,27 +9,51 @@
 <script src="/js/jquery-3.3.1.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script>
-	var streamId="stream1";
+	function getServer() {
+		return $("#serverAddress").val();
+	}
+	
+	function getStreamId() {
+		return $("#streamName").val();
+	}
+	
+	function getAMSUrl() {
+		if ($("#sslUsage").is(':checked')) {
+			return "https://" + getServer() + ":5443";
+		} else {
+			return "http://" + getServer() + ":5080";
+		}
+	}
 
 	function loadPublisher(protocol) {
-		var server = $("#serverAddress").val();
-
 		if (protocol == "webrtc") {
-			$("#publisherFrame").attr("src", "http://"+server+":5080/WebRTCAppEE/index.html?name="+streamId);
+			$("#publisherFrame").attr("allow", "microphone camera");
+			$("#publisherFrame").attr("src",
+					getAMSUrl() + "/WebRTCAppEE/index.html?name=" + getStreamId());
 		} else if (protocol == "rtmp") {
-			$("#publisherFrame").attr("src", "/test/rtmp/publisher/publish.html?server=" + server+"&name="+streamId);
+			$("#publisherFrame").attr(
+					"src",
+					"/test/rtmp/publisher/publish.html?server=" + getServer()
+							+ "&name=" + getStreamId());
 		}
 	}
 
 	function loadPlayer(protocol) {
-		var server = $("#serverAddress").val();
-
 		if (protocol == "webrtc") {
-			$("#playerFrame").attr("src", "http://"+server+":5080/WebRTCAppEE/player.html?name="+streamId);
+			$("#playerFrame").attr(
+					"src",
+					getAMSUrl()+"/WebRTCAppEE/player.html?name="
+							+ getStreamId());
 		} else if (protocol == "rtmp") {
-			$("#playerFrame").attr("src", "/test/rtmp/player/play.html?server=" + server+"&name="+streamId);
+			$("#playerFrame").attr(
+					"src",
+					"/test/rtmp/player/play.html?server=" + getServer() + "&name="
+							+ getStreamId());
 		} else if (protocol == "hls") {
-			$("#playerFrame").attr("src", "http://"+server+":5080/WebRTCAppEE/play.html?name="+streamId);
+			$("#playerFrame").attr(
+					"src",
+					getAMSUrl()+"/WebRTCAppEE/play.html?name="
+							+ getStreamId());
 		}
 
 	}
@@ -44,7 +68,9 @@
 					<div class="card">
 						<h2 class="card-header">Ant Media Server Settings</h2>
 						<div class="card-body">
-							Address: <input type="text" id="serverAddress" value="localhost">
+							Address: <input type="text" id="serverAddress" value="test.antmedia.io">&nbsp;&nbsp;&nbsp;
+							Stream Id: <input type="text" id="streamName" value="stream1">&nbsp;&nbsp;&nbsp;
+							SSL: <input type="checkbox" id="sslUsage" checked>
 						</div>
 					</div>
 				</div>

@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+<style>
+table.data {
+  border-collapse: collapse;
+  border: 2px grey solid;
+  font: 12px sans-serif;
+}
+
+table.data  td,th {
+  border: 1px grey solid;
+  padding: 5px;
+}
+</style>
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<script>
+  $(document).ready(function() {
+    $.get('resources.csv', function(data) {
+      var html = "<table class='data'>";
+      var rows = data.split("\n");
+      var firstRow = true;
+      rows.forEach( function getvalues(row) {
+        html += "<tr>";
+        var columns = row.split(";");
+        columns.forEach( function getvalues(column) {
+          if(firstRow) {
+            html += "<th>" + column + "</th>";
+          }
+          else {
+            html += "<td>" + column + "</td>";
+          }
+        });
+        html += "</th>";
+        firstRow = false;
+      });  
+      html += "</table>";
+      $('#csv').html(html);
+    });
+  });
+</script>
+</head>
+<body>
+<table border="0" style="width:100%">
+  <tr>
+    <td><img src="counts_vs_time.jpeg"></td>
+    <td rowspan="3"><div id='csv'></div></td>
+  </tr>
+  <tr>
+    <td><img src="cpu_vs_time.jpeg"></td>
+  </tr>
+  <tr>
+    <td><img src="memory_vs_time.jpeg"></td>
+  </tr>
+</table>
+</body>
+</html>
+

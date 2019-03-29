@@ -28,8 +28,20 @@
 			populate('#config', $.parseJSON(data));
 		});
 		
-		$.get("/results", function(data2, status) {
-			$('#results').html(data2);
+		$.get("/scenarios", function(data, status) {
+			var scenarios = data.split(",");
+			var text = "<ul>";
+			for (i = 0; i < scenarios.length; i++) {
+				text += "<li><h2>"+scenarios[i];
+				text += "<button type='button' onclick='runTest(\""+scenarios[i]+"\")' class='btn btn-default'>";
+				text += "<i class='fa fa-play'></i></button></h2></li>"
+			}
+			text += "</ul>";
+			$('#scenarios').html(text);
+		});
+		
+		$.get("/results", function(data, status) {
+			$('#results').html(data);
 		});
 	});
 
@@ -97,6 +109,14 @@
 								<div class="row">
 									<input type="text" name="STREAM_NAME">
 								</div>
+								<div class="row">AMS USER</div>
+								<div class="row">
+									<input type="text" name="USER">
+								</div>
+								<div class="row">AMS PASS</div>
+								<div class="row">
+									<input type="text" name="PASS">
+								</div>
 							</form>
 							<div class="row">
 								<button class="btn btn-success" onclick="save()">
@@ -110,7 +130,7 @@
 				<div class="col-sm-4">
 					<div class="card">
 						<h2 class="card-header">Ant Media Server Load Test</h2>
-						<div class="card-body">
+						<div id=scenarios class="card-body">
 							<ul>
 								<li><h2>
 										HLS Play
@@ -143,6 +163,13 @@
 								<li><h2>
 										WebRTC Publish
 										<button type="button" onclick="runTest('webrtc_publish')"
+											class="btn btn-default">
+											<i class="fa fa-play"></i>
+										</button>
+									</h2></li>
+									<li><h2>
+										N x N Test
+										<button type="button" onclick="runTest('nxn')"
 											class="btn btn-default">
 											<i class="fa fa-play"></i>
 										</button>

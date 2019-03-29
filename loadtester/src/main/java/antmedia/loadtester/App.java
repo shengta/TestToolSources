@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import antmedia.loadtester.scenarios.HLSPlayScenario;
+import antmedia.loadtester.scenarios.RTMPPlayScenario;
+import antmedia.loadtester.scenarios.RTMPPublishScenario;
+import antmedia.loadtester.scenarios.WebRTCPlayScenario;
+import antmedia.loadtester.scenarios.WebRTCPublisherScenario;
+
 @Controller
 @EnableAutoConfiguration
 public class App extends WebMvcConfigurerAdapter{
@@ -47,6 +53,19 @@ public class App extends WebMvcConfigurerAdapter{
     @ResponseBody
     String getRunningTest() {
     	return TestRunner.getIsTestFinished()+"";
+    }
+    
+    @GetMapping("/scenarios")
+    @ResponseBody
+    String getScenarios() {
+    	String scenarios = "";
+    	scenarios += RTMPPlayScenario.name + ",";
+    	scenarios += RTMPPublishScenario.name + ",";
+    	scenarios += HLSPlayScenario.name + ",";
+    	scenarios += WebRTCPublisherScenario.name + ",";
+    	scenarios += WebRTCPlayScenario.name;
+    	
+    	return scenarios;
     }
     
     
