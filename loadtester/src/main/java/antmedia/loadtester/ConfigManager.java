@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 public class ConfigManager {
 
 	public static Config conf;
-	static String file = "/home/antmedia/test/config.json";
+	static String file = "/usr/local/test/config.json";
 	static String fileJson = ""; 
 
 	public static String getConfig() {

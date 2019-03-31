@@ -3,7 +3,7 @@ package antmedia.loadtester;
 public class Config {
 	public String ORIGIN_SERVER = "localhost";
 	private String EDGE_ACCESS_POINT = "localhost";
-	public String TEST_FILE = "/home/antmedia/test/Test.mp4";
+	public String TEST_FILE = "/usr/local/test/Test.mp4";
 	public String DURATION = "60";
 	public String LOAD_SIZE = "5";
 	public String STREAM_NAME = "deneme";
