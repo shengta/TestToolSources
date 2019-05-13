@@ -21,7 +21,7 @@ public class WebRTCPlayer {
 	}
 	
 	public void start() {
-		String command = "java -cp webrtc-test.jar:libs/* -Djava.library.path=libs/native io.antmedia.webrtctest.Starter";
+		String command = "java -cp webrtc-test.jar:libs/* -Djava.library.path=libs/native io.antmedia.Starter";
 		command += " -s "+server+" -i "+stream + " -u false";
 		System.out.println("command:"+command);
 		ProcessBuilder pb = new ProcessBuilder(command.split(" "));

@@ -23,7 +23,7 @@ public class WebRTCPublisher {
 	}
 
 	public void start() {
-		String command = "java -cp webrtc-test.jar:libs/* -Djava.library.path=libs/native io.antmedia.webrtctest.Starter";
+		String command = "java -cp webrtc-test.jar:libs/* -Djava.library.path=libs/native io.antmedia.Starter";
 		command += " -s "+server+" -m publisher -f "+file+" -i "+stream+" -u false";
 		ProcessBuilder pb = new ProcessBuilder(command.split(" "));
 		pb.directory(new File("/usr/local/test/webrtctest"));
