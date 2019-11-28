@@ -48,7 +48,7 @@ public class TestRunner {
 
 	public static String getHistory() {
 		String history = "";
-		File file = new File("/usr/local/test/results");
+		File file = new File("/home/antmedia/test/results");
 		if(file.exists()) {
 			String[] dirs = file.list();
 			Arrays.sort(dirs);

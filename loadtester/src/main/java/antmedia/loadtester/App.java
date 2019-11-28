@@ -71,7 +71,7 @@ public class App extends WebMvcConfigurerAdapter{
     
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/testresults/**").addResourceLocations("file:/usr/local/test/results/");
+        registry.addResourceHandler("/testresults/**").addResourceLocations("file:/home/antmedia/test/results/");
     }
     
     
