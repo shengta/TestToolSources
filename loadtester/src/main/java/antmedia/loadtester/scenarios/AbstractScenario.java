@@ -40,7 +40,7 @@ public abstract class AbstractScenario {
 	ArrayList<InstantStat> stats = new ArrayList<>();
 
 	public void start() {
-		resultDir = new File("/home/antmedia/test/results/"+new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date()));
+		resultDir = new File("/usr/local/test/results/"+new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date()));
 		if(!resultDir.exists()) {
 			resultDir.mkdirs();
 		}

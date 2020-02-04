@@ -26,7 +26,7 @@ public class WebRTCPublisher {
 		String command = "java -cp webrtc-test.jar:libs/* -Djava.library.path=libs/native io.antmedia.Starter";
 		command += " -s "+server+" -m publisher -f "+file+" -i "+stream+" -u false";
 		ProcessBuilder pb = new ProcessBuilder(command.split(" "));
-		pb.directory(new File("/home/antmedia/test/webrtctest"));
+		pb.directory(new File("/usr/local/test/webrtctest"));
 
 		pb.redirectOutput(new File(dir, id+"_webrtc_publish_out.txt"));
 		pb.redirectError(new File(dir, id+"_webrtc_publish_err.txt"));

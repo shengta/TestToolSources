@@ -25,7 +25,7 @@ public class WebRTCPlayer {
 		command += " -s "+server+" -i "+stream + " -u false";
 		System.out.println("command:"+command);
 		ProcessBuilder pb = new ProcessBuilder(command.split(" "));
-		pb.directory(new File("/home/antmedia/test/webrtctest"));
+		pb.directory(new File("/usr/local/test/webrtctest"));
 		
 		pb.redirectOutput(new File(dir, id+"_webrtc_play_out.txt"));
 		pb.redirectError(new File(dir, id+"_webrtc_play_err.txt"));
