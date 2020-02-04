@@ -70,8 +70,8 @@ public class RestManager {
 
 	public static boolean login(String ip) {
 		JsonObject obj = new JsonObject();
-		obj.addProperty("email", "antmedia");
-		obj.addProperty("password", "antmedia");
+		obj.addProperty("email", ConfigManager.conf.USER);
+		obj.addProperty("password", ConfigManager.conf.PASS);
 		
 		boolean result = false;
 		
@@ -118,7 +118,7 @@ public class RestManager {
 			Map parsed = new Gson().fromJson(content, Map.class);
 			
 			stat.cpu = ((Double)((Map)parsed.get("cpuUsage")).get("systemCPULoad")).intValue();
-			stat.memory = Long.parseLong((String)((Map)parsed.get("systemMemoryInfo")).get("inUseMemory"));
+			stat.memory = ((Double)((Map)parsed.get("systemMemoryInfo")).get("inUseMemory")).longValue();
 			stat.totalLiveStreamSize = ((Double)parsed.get("totalLiveStreamSize")).intValue();
 			stat.localWebRTCLiveStreams = ((Double)parsed.get("localWebRTCLiveStreams")).intValue();
 			stat.localWebRTCViewers = ((Double)parsed.get("localWebRTCViewers")).intValue();
