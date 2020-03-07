@@ -117,8 +117,8 @@ public class RestManager {
 			
 			Map parsed = new Gson().fromJson(content, Map.class);
 			
-			stat.cpu = ((Double)((Map)parsed.get("cpuUsage")).get("systemCPULoad")).intValue();
-			stat.memory = ((Double)((Map)parsed.get("systemMemoryInfo")).get("inUseMemory")).longValue();
+			stat.cpu = new Double(((Map)parsed.get("cpuUsage")).get("systemCPULoad").toString()).intValue();
+			stat.memory = new Double(((Map)parsed.get("systemMemoryInfo")).get("inUseMemory").toString()).longValue();
 			stat.totalLiveStreamSize = ((Double)parsed.get("totalLiveStreamSize")).intValue();
 			stat.localWebRTCLiveStreams = ((Double)parsed.get("localWebRTCLiveStreams")).intValue();
 			stat.localWebRTCViewers = ((Double)parsed.get("localWebRTCViewers")).intValue();
