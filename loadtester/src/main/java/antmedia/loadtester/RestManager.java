@@ -123,6 +123,7 @@ public class RestManager {
 			stat.localWebRTCLiveStreams = new Double(((Map)parsed.get("localWebRTCLiveStreams")).toString()).intValue();
 			stat.localWebRTCViewers = new Double(((Map)parsed.get("localWebRTCViewers")).toString()).intValue();
 			stat.localHLSViewers = new Double(((Map)parsed.get("localHLSViewers")).toString()).intValue();
+			stat.localRTMPViewers = new Double(((Map)parsed.get("localRTMPViewers")).toString()).intValue();
 			stat.time = System.currentTimeMillis();
 			
 			System.out.println(stat.toCsv());
