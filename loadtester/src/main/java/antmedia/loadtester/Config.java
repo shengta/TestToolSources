@@ -6,9 +6,9 @@ public class Config {
 	public String TEST_FILE = "/usr/local/test/Test.mp4";
 	public String DURATION = "60";
 	public String LOAD_SIZE = "5";
-	public String STREAM_NAME = "deneme";
-	public String USER = "antmedia";
-	public String PASS = "antmedia";
+	public String STREAM_NAME = "testStream";
+	public String USER = "test@antmedia.io";
+	public String PASS = "testtest";
 	
 	public String getORIGIN_SERVER() {
 		return ORIGIN_SERVER;
