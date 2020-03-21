@@ -119,10 +119,10 @@ public class RestManager {
 			
 			stat.cpu = new Double(((Map)parsed.get("cpuUsage")).get("systemCPULoad").toString()).intValue();
 			stat.memory = new Double(((Map)parsed.get("systemMemoryInfo")).get("inUseMemory").toString()).longValue();
-			stat.totalLiveStreamSize = ((Double)parsed.get("totalLiveStreamSize")).intValue();
-			stat.localWebRTCLiveStreams = ((Double)parsed.get("localWebRTCLiveStreams")).intValue();
-			stat.localWebRTCViewers = ((Double)parsed.get("localWebRTCViewers")).intValue();
-			stat.localHLSViewers = ((Double)parsed.get("localHLSViewers")).intValue();
+			stat.totalLiveStreamSize = new Double(((Map)parsed.get("totalLiveStreamSize")).toString()).intValue();
+			stat.localWebRTCLiveStreams = new Double(((Map)parsed.get("localWebRTCLiveStreams")).toString()).intValue();
+			stat.localWebRTCViewers = new Double(((Map)parsed.get("localWebRTCViewers")).toString()).intValue();
+			stat.localHLSViewers = new Double(((Map)parsed.get("localHLSViewers")).toString()).intValue();
 			stat.time = System.currentTimeMillis();
 			
 			System.out.println(stat.toCsv());
